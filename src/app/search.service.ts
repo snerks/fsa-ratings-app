@@ -58,7 +58,7 @@ export class SearchService {
       'sortOptionKey=Rating',
       'ratingKeyName=RatingValue',
       'ratingOperator=eq',
-      'pageSize=50',
+      'pageSize=100',
     ].join('&');
     const obs = this.httpClient.get<SearchResult>(
       `${this.baseUrl}Establishments?${params}`,

@@ -210,17 +210,17 @@ export class EstablishmentDetailsComponent {
     if (!type) return '';
     switch (type.toLowerCase()) {
       case 'pub/bar/nightclub':
-        return '/icons/pub.svg';
+        return 'icons/pub.svg';
       case 'restaurant/cafe/canteen':
-        return '/icons/restaurant.svg';
+        return 'icons/restaurant.svg';
       case 'takeaway/sandwich shop':
-        return '/icons/takeaway.svg';
+        return 'icons/takeaway.svg';
       case 'school/college/university':
-        return '/icons/school.svg';
+        return 'icons/school.svg';
       case 'hotel/bed & breakfast/guest house':
-        return '/icons/hotel.svg';
+        return 'icons/hotel.svg';
       default:
-        return '/icons/other.svg';
+        return 'icons/other.svg';
     }
   }
 

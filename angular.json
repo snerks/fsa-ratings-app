@@ -13,7 +13,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "https://snerks.github.io/fsa-ratings-app/"
+            "baseHref": "/fsa-ratings-app/"
           }
         },
         "build": {

@@ -71,7 +71,7 @@ export class App {
     );
     iconRegistry.addSvgIcon(
       'angular',
-      sanitizer.bypassSecurityTrustResourceUrl('/icons/angular.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('icons/angular.svg')
     );
   }
 }

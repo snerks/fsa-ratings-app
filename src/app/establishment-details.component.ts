@@ -13,7 +13,6 @@ import { DatePipe } from '@angular/common';
   imports: [MatCardModule, DatePipe],
   template: `
     <div class="flex flex-col items-center gap-8 py-8">
-      <h6>{{ lastQuery }}</h6>
       <mat-card class="w-full max-w-2xl shadow-lg">
         <mat-card-header>
           <div class="flex items-center gap-3">

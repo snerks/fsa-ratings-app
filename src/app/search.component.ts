@@ -38,23 +38,21 @@ interface SearchQuery {
           >
         </mat-card-header>
         <mat-card-content>
-          {{ lastQuery().name }}
-          {{ lastQuery().postcode }}
           <form
             [formGroup]="form"
             class="flex flex-col gap-6"
             (ngSubmit)="onSearch()"
           >
-            <mat-form-field appearance="outline" class="w-full">
-              <!-- <mat-label class="text-base font-semibold text-gray-700"
+            <mat-form-field class="w-full">
+              <mat-label class="text-base font-semibold text-gray-700"
                 >Name</mat-label
-              > -->
+              >
               <input matInput formControlName="name" class="text-base" />
             </mat-form-field>
-            <mat-form-field appearance="outline" class="w-full">
-              <!-- <mat-label class="text-base font-semibold text-gray-700"
+            <mat-form-field class="w-full">
+              <mat-label class="text-base font-semibold text-gray-700"
                 >Postcode</mat-label
-              > -->
+              >
               <input matInput formControlName="postcode" class="text-base" />
             </mat-form-field>
             <button

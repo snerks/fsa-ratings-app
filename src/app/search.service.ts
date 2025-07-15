@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { signal } from '@angular/core';
 
 export interface Establishment {
   FHRSID: number;
@@ -23,6 +24,7 @@ export interface Establishment {
     ConfidenceInManagement: number;
   };
   BusinessType?: string;
+  RatingDate?: string;
 }
 
 export interface SearchResult {
@@ -39,10 +41,17 @@ export class SearchService {
     },
   };
 
+  readonly lastQuery = signal<{ name: string; postcode: string }>({
+    name: '',
+    postcode: '',
+  });
+  readonly lastResults = signal<SearchResult | null>(null);
+
   searchEstablishments(
     name: string,
     postcode: string
   ): Observable<SearchResult> {
+    this.lastQuery.set({ name, postcode });
     const params = [
       `name=${encodeURIComponent(name)}`,
       `address=${encodeURIComponent(postcode)}`,
@@ -51,10 +60,12 @@ export class SearchService {
       'ratingOperator=eq',
       'pageSize=50',
     ].join('&');
-    return this.httpClient.get<SearchResult>(
+    const obs = this.httpClient.get<SearchResult>(
       `${this.baseUrl}Establishments?${params}`,
       this.headersOptions
     );
+    obs.subscribe((results) => this.lastResults.set(results));
+    return obs;
   }
 
   getEstablishment(FHRSID: number): Observable<Establishment> {

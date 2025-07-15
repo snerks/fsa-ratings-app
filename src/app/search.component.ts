@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  OnInit,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,6 +12,12 @@ import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { SearchService, Establishment } from './search.service';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+
+interface SearchQuery {
+  name?: string;
+  postcode?: string;
+}
 
 @Component({
   selector: 'app-search',
@@ -27,6 +38,8 @@ import { inject } from '@angular/core';
           >
         </mat-card-header>
         <mat-card-content>
+          {{ lastQuery().name }}
+          {{ lastQuery().postcode }}
           <form
             [formGroup]="form"
             class="flex flex-col gap-6"
@@ -124,11 +137,12 @@ import { inject } from '@angular/core';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   private readonly searchService = inject(SearchService);
+  private readonly router = inject(Router);
   form = new FormGroup({
-    name: new FormControl(''),
-    postcode: new FormControl(''),
+    name: new FormControl(this.searchService.lastQuery().name),
+    postcode: new FormControl(this.searchService.lastQuery().postcode),
   });
   private readonly _results = signal<Establishment[]>([]);
   readonly results = this._results.asReadonly();
@@ -136,10 +150,19 @@ export class SearchComponent {
   readonly searched = signal(false);
   readonly displayedColumns = ['BusinessName', 'Address', 'RatingValue'];
 
+  readonly lastQuery = signal<SearchQuery>({
+    name: '',
+    postcode: '',
+  });
+
   onSearch() {
     this.loading.set(true);
     this.searched.set(true);
     const { name, postcode } = this.form.value;
+    this.lastQuery.set({
+      name: name ?? '',
+      postcode: postcode ?? '',
+    });
     this.searchService
       .searchEstablishments(name ?? '', postcode ?? '')
       .subscribe({
@@ -155,6 +178,19 @@ export class SearchComponent {
   }
 
   viewDetails(id: number) {
-    window.location.href = `/establishment/${id}`;
+    this.router.navigate(['/establishment', id]);
+  }
+
+  ngOnInit() {
+    const lastResults = this.searchService.lastResults();
+    const lastQuery = this.searchService.lastQuery();
+    if (lastResults && lastResults.establishments.length > 0) {
+      this._results.set(lastResults.establishments);
+      this.form.setValue({
+        name: lastQuery.name,
+        postcode: lastQuery.postcode,
+      });
+      this.searched.set(true);
+    }
   }
 }

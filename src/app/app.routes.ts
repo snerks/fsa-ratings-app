@@ -4,7 +4,8 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./ratings.component').then((m) => m.RatingsComponent),
+      //   import('./ratings.component').then((m) => m.RatingsComponent),
+      import('./search.component').then((m) => m.SearchComponent),
   },
   {
     path: 'search',
